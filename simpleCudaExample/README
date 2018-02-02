@@ -1,0 +1,29 @@
+-----Problem:
+Cuda_prog_1
+
+-----Platform tested:
+Ubuntu 16.04.3 LTS
+gcc version 6.3.0
+GUN Make 4.1
+
+-----GPU:
+Tesla P100-PCIE-16G
+
+-----Run:
+$make clean
+$make
+or
+$make USE_FAST_MATH=1 #For '-use_fast_math' compilier option
+$./cuda_prog_1 4 1
+#'4' above presents the 4th version of code, we have 1, 2, 3, 4 versions of code.
+#Defoult value is '1'. The versions map to the optimizations step by step
+#'1' above presents whether doing correctness testing by running the basic version's code to compare to test.
+#Defoult value is '0'. So we can chose '0' to not do the test
+
+-----Optimizations:
+1>. avg run time: 0.409645 ms; Basic version
+2>. avg run time: 0.110410 ms; Reorginize the block and grid setting as <256, 1>, <dimx*dimy/256, 1> to change
+                               data mapping and optimize memory access. And also reduce index calculation.
+3>. avg run time: 0.071187 ms; For each thread, process 2 continious elements, to avoid branch with in warp
+4>. avg run time: 0.069136 ms; Using "float4" data type to optimize data access
+5>. avg run time: 0.065920 ms; Add "use_fast_math" in the compilier option
